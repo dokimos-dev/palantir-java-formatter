@@ -1,0 +1,11 @@
+src/
+daemon/src/
+**/*.test.ts
+**/*.test.js
+.gitignore
+.github/
+scripts/
+node_modules/
+out/
+tsconfig.json
+*.map

@@ -1,0 +1,10 @@
+node_modules/
+out/
+dist/
+lib/formatter-daemon.jar
+daemon/build/
+daemon/.gradle/
+*.vsix
+.DS_Store
+*.log
+.vscode-test/

@@ -1,0 +1,102 @@
+{
+  "name": "palantir-java-format",
+  "displayName": "Palantir Java Format",
+  "description": "Java code formatter using Palantir Java Format via a daemon process",
+  "version": "0.1.0",
+  "publisher": "palantir",
+  "author": {
+    "name": "Fabio Kapsahili",
+    "email": "fabio.kapsahili@protonmail.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/palantir-java-format.git"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:java"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Palantir Java Format",
+      "properties": {
+        "palantirJavaFormat.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Palantir Java Format"
+        },
+        "palantirJavaFormat.style": {
+          "type": "string",
+          "default": "PALANTIR",
+          "enum": [
+            "PALANTIR"
+          ],
+          "description": "Formatting style"
+        },
+        "palantirJavaFormat.javaHome": {
+          "type": "string",
+          "default": "",
+          "description": "Path to Java home directory (uses JAVA_HOME env var if not set)"
+        },
+        "palantirJavaFormat.jvmArgs": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional JVM arguments"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "palantirJavaFormat.restartDaemon",
+        "title": "Restart Palantir Java Format Daemon"
+      },
+      {
+        "command": "palantirJavaFormat.showOutput",
+        "title": "Show Palantir Java Format Output"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=es2022 --sourcemap",
+    "dev": "npm run build -- --watch",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write 'src/**/*.ts'",
+    "format:check": "prettier --check 'src/**/*.ts'",
+    "test": "node ./dist/test/runTest.js",
+    "package": "npx @vscode/vsce package",
+    "publish": "npx @vscode/vsce publish"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.56.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.10.0",
+    "@types/sinon": "^17.0.2",
+    "@types/uuid": "^9.0.1",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.3.8",
+    "esbuild": "^0.19.11",
+    "eslint": "^8.56.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "prettier": "^3.1.0",
+    "sinon": "^17.0.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  }
+}
