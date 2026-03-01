@@ -1,7 +1,7 @@
 {
-  "name": "palantir-java-format",
-  "displayName": "Palantir Java Format",
-  "description": "Java code formatter using Palantir Java Format via a daemon process",
+  "name": "palantir-java-formatter",
+  "displayName": "Palantir Java Formatter",
+  "description": "VS Code extension for formatting Java with Palantir Java Format",
   "version": "0.1.0",
   "publisher": "dokimos-dev",
   "author": {

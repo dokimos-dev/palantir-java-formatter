@@ -29,6 +29,19 @@ Install in VS Code:
 code --install-extension palantir-java-format-0.1.0.vsix
 ```
 
+## Setup
+
+Add this to your VS Code settings JSON to use as the default Java formatter with format on save:
+
+```json
+{
+  "[java]": {
+    "editor.defaultFormatter": "dokimos-dev.palantir-java-formatter",
+    "editor.formatOnSave": true
+  }
+}
+```
+
 ## Configuration
 
 Open VS Code settings and search for "Palantir Java Format":
