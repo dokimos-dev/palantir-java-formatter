@@ -1,33 +1,10 @@
-# Palantir Java Format
+# Palantir Java Formatter
 
-A VS Code extension that formats Java files using Palantir Java Format via a long running JVM daemon process.
+Formats Java source files using [Palantir Java Format](https://github.com/palantir/palantir-java-format). Runs a long lived JVM daemon in the background for fast formatting.
 
-## Installation
+## Requirements
 
-Clone the repository and build the extension locally.
-
-Build the Java daemon:
-```bash
-cd daemon && gradle build fatJar
-cd .. && mkdir -p lib
-cp daemon/build/libs/formatter-daemon.jar lib/
-```
-
-Install Node dependencies and build the extension:
-```bash
-npm install
-npm run build
-```
-
-Package the extension:
-```bash
-npm run package
-```
-
-Install in VS Code:
-```bash
-code --install-extension palantir-java-format-0.1.0.vsix
-```
+Java 17 or later on the PATH or specified via the `palantirJavaFormat.javaHome` setting.
 
 ## Setup
 
@@ -44,63 +21,51 @@ Add this to your VS Code settings JSON to use as the default Java formatter with
 
 ## Configuration
 
-Open VS Code settings and search for "Palantir Java Format":
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `palantirJavaFormat.enabled` | boolean | `true` | Enable or disable the formatter |
+| `palantirJavaFormat.style` | string | `PALANTIR` | Formatting style |
+| `palantirJavaFormat.javaHome` | string | | Path to Java home. Falls back to JAVA_HOME |
+| `palantirJavaFormat.jvmArgs` | array | `[]` | Additional JVM arguments for the daemon |
 
-- `palantirJavaFormat.enabled` boolean. Enable or disable the formatter. Default: true
-- `palantirJavaFormat.style` string. Formatting style. Default: PALANTIR
-- `palantirJavaFormat.javaHome` string. Path to Java home. If not set uses JAVA_HOME environment variable
-- `palantirJavaFormat.jvmArgs` array. Additional JVM arguments to pass to the daemon
+## Commands
 
-## Usage
+- **Palantir Java Format: Restart Daemon** restart the daemon process
+- **Palantir Java Format: Show Output** show the daemon log in the output panel
 
-Open a Java file and save it to format. Right click and select "Format Document" or use the keyboard shortcut.
+## How it works
 
-The extension shows a status indicator in the bottom right that displays the daemon state. Click it to restart the daemon.
+The extension spawns a JVM daemon process that communicates via JSON over stdin/stdout. The daemon stays running between format requests so you only pay the JVM startup cost once. If the daemon crashes it automatically restarts up to 3 times.
 
-Commands:
-- `Palantir Java Format: Restart Daemon` restart the daemon process
-- `Palantir Java Format: Show Output` display the daemon output in the output panel
+The status bar shows the current daemon state. Click it to restart.
 
-## Testing Locally
+## Building from source
 
-To test the extension in your Java projects:
+Build the Java daemon:
+```bash
+cd daemon && gradle clean fatJar
+cd .. && mkdir -p lib
+cp daemon/build/libs/formatter-daemon.jar lib/
+```
 
-1. Build and package the extension as described above
-2. Install the VSIX file in VS Code
-3. Open a Java project folder in VS Code
-4. Open a Java file and save it to trigger formatting
-5. Check the status icon at the bottom right. It shows check mark when running
-6. If formatting fails, click the status icon to restart the daemon and check the output panel
+Build the extension:
+```bash
+npm install
+npm run build
+```
 
-## Requirements
-
-Java 17 or later on the PATH or specified via `palantirJavaFormat.javaHome` setting.
-
-## Architecture
-
-The extension spawns a long running JVM daemon process that communicates via JSON lines over stdin/stdout. Each format request receives a response with the formatted source. The daemon handles one format request at a time.
-
-The daemon automatically restarts if it crashes, up to 3 times before giving up.
+Package as VSIX:
+```bash
+npm run package
+```
 
 ## Development
 
-Format code:
 ```bash
-npm run format
+npm run dev         # watch mode
+npm run lint        # check for lint errors
+npm run format      # format with prettier
+npm test            # run tests
 ```
 
-Check for lint errors:
-```bash
-npm run lint
-npm run lint:fix
-```
-
-Run tests:
-```bash
-npm test
-```
-
-Watch mode for development:
-```bash
-npm run dev
-```
+Open this repo in VS Code and press F5 to launch an Extension Development Host for testing.
