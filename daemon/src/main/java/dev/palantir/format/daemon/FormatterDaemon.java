@@ -4,26 +4,15 @@ import com.google.gson.Gson;
 import com.palantir.javaformat.java.FormatterException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 
 public class FormatterDaemon {
     private static final Gson gson = new Gson();
     private static final FormatterService formatterService = new FormatterService();
 
     public static void main(String[] args) throws Exception {
-        // Use raw fd for protocol output so nothing else can interfere
-        FileOutputStream rawStdout = new FileOutputStream(FileDescriptor.out);
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(rawStdout));
-
-        // Redirect System.out to stderr so library debug output
-        // doesn't corrupt the JSON protocol
-        PrintStream stderrStream = new PrintStream(new FileOutputStream(FileDescriptor.err), true);
-        System.setOut(stderrStream);
-
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.err.println("Daemon ready");

@@ -61,7 +61,7 @@ To test the extension in your Java projects:
 
 ## Requirements
 
-Java 11 or later on the PATH or specified via `palantirJavaFormat.javaHome` setting.
+Java 17 or later on the PATH or specified via `palantirJavaFormat.javaHome` setting.
 
 ## Architecture
 
