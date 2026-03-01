@@ -2,7 +2,7 @@
   "name": "palantir-java-formatter",
   "displayName": "Palantir Java Formatter",
   "description": "Format Java source files using Palantir Java Format",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "dokimos-dev",
   "author": {
     "name": "Fabio Kapsahili",
