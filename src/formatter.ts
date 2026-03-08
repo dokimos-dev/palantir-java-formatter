@@ -24,7 +24,7 @@ export class PalantirFormattingProvider
 
   private async formatDocument(
     document: vscode.TextDocument,
-    _range: vscode.Range | null
+    range: vscode.Range | null
   ): Promise<vscode.TextEdit[]> {
     const client = this.daemonManager.getClient();
     if (!client) {
@@ -40,6 +40,13 @@ export class PalantirFormattingProvider
         source,
         style: 'PALANTIR',
       };
+
+      if (range) {
+        request.startLine = range.start.line;
+        request.startColumn = range.start.character;
+        request.endLine = range.end.line;
+        request.endColumn = range.end.character;
+      }
 
       const result = await client.request<FormatResult>('format', request);
       const formatted = result.formatted;

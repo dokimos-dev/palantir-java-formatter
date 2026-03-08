@@ -28,10 +28,22 @@ public class FormatterDaemon {
                     Protocol.FormatRequest formatRequest =
                             gson.fromJson(request.params, Protocol.FormatRequest.class);
                     try {
-                        String formatted =
-                                formatterService.format(
-                                        formatRequest.source,
-                                        formatRequest.style != null ? formatRequest.style : "PALANTIR");
+                        String style = formatRequest.style != null ? formatRequest.style : "PALANTIR";
+                        String formatted;
+                        if (formatRequest.startLine != null
+                                && formatRequest.startColumn != null
+                                && formatRequest.endLine != null
+                                && formatRequest.endColumn != null) {
+                            formatted = formatterService.formatRange(
+                                    formatRequest.source,
+                                    style,
+                                    formatRequest.startLine,
+                                    formatRequest.startColumn,
+                                    formatRequest.endLine,
+                                    formatRequest.endColumn);
+                        } else {
+                            formatted = formatterService.format(formatRequest.source, style);
+                        }
                         response.result = gson.toJsonTree(new Protocol.FormatResult(formatted));
                     } catch (FormatterException e) {
                         response.error = new Protocol.ErrorDetail("FORMATTER_ERROR", e.getMessage());

@@ -1,11 +1,13 @@
 package dev.palantir.format.daemon;
 
+import com.google.common.collect.Range;
 import com.palantir.javaformat.java.Formatter;
 import com.palantir.javaformat.java.FormatterException;
 import com.palantir.javaformat.java.JavaFormatterOptions;
+import java.util.Collections;
 
 public class FormatterService {
-    private Formatter formatter;
+    private final Formatter formatter;
 
     public FormatterService() {
         JavaFormatterOptions options = JavaFormatterOptions.builder()
@@ -34,8 +36,26 @@ public class FormatterService {
             int endLine,
             int endColumn)
             throws FormatterException {
-        // For now, format the entire document
-        // In a full implementation, this would use the range-based formatting API
-        return format(source, style);
+        int startOffset = lineColumnToOffset(source, startLine, startColumn);
+        int endOffset = lineColumnToOffset(source, endLine, endColumn);
+
+        if (startOffset >= endOffset) {
+            return source;
+        }
+
+        return formatter.formatSource(
+                source, Collections.singleton(Range.closedOpen(startOffset, endOffset)));
+    }
+
+    private static int lineColumnToOffset(String source, int line, int column) {
+        int offset = 0;
+        for (int i = 0; i < line; i++) {
+            int newline = source.indexOf('\n', offset);
+            if (newline == -1) {
+                return source.length();
+            }
+            offset = newline + 1;
+        }
+        return Math.min(offset + column, source.length());
     }
 }
